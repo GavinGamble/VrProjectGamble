@@ -4,15 +4,41 @@ using UnityEngine;
 
 public class RRotation : MonoBehaviour
 {
-    public float rotationSpeed = 1.0f; // 1 rotation per second
-    public float rotationAngle = 15.0f; // 15 degrees per rotation
+    [SerializeField]
+    private GameObject reticleSquare;
+    private float scaleSpeed = 0.1f;
+    private float maxScale = 1.2f;
+    private float minScale = 1f;
+    private Vector3 vector3;
+    private readonly float speed = 50.0f;
 
-    void Update()
+    private bool isScalingUp = true;
+
+    private void Update()
     {
-        // Calculate the rotation amount based on the desired angle and speed
-        float rotationAmount = rotationAngle * rotationSpeed * Time.deltaTime;
+        // Rotate the reticle around the y-axis
+        if (Application.isPlaying)
+        {
+            vector3 = new Vector3(0, 1, 0);
+            transform.Rotate(speed * Time.deltaTime * vector3);
+        }
 
-        // Rotate the object around its X-axis
-        transform.Rotate(Vector3.right * rotationAmount);
+        // Scale the reticle up and down
+        if (isScalingUp)
+        {
+            transform.localScale += Vector3.one * scaleSpeed * Time.deltaTime;
+            if (transform.localScale.x >= maxScale)
+            {
+                isScalingUp = false;
+            }
+        }
+        else
+        {
+            transform.localScale -= Vector3.one * scaleSpeed * Time.deltaTime;
+            if (transform.localScale.x <= minScale)
+            {
+                isScalingUp = true;
+            }
+        }
     }
 }
